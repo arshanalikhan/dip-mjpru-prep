@@ -2,6 +2,8 @@
 
 > **Exam weight:** restoration (degradation model + noise models) is asked in almost every paper, word for word. Frequency filters and homomorphic filtering come next.
 
+**Prefer to watch first?** [Video lectures for Unit 2 →](#videos/unit2)
+
 ## 2.1 Fourier transform and the frequency domain
 
 **Why:** in the frequency domain, slowly varying parts of an image (smooth areas) are **low frequencies** and rapidly varying parts (edges, noise) are **high frequencies**. Filtering becomes a simple multiplication.

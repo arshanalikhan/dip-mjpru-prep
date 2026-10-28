@@ -2,6 +2,8 @@
 
 > **Exam weight:** low in recent papers (only 2017 asked representation/description and object recognition). Learn one solid answer each on representation & description and on recognition methods; that covers a possible question 8 or a short note.
 
+**Prefer to watch first?** [Video lectures for Unit 5 →](#videos/unit5)
+
 ## 5.1 Representation
 
 After segmentation, the pixels of a region must be **represented** in a form suited to computer processing:

@@ -2,6 +2,8 @@
 
 > **Exam weight:** dilation/erosion/opening/closing is asked in **every** paper. RGB/HSI and conversions are next.
 
+**Prefer to watch first?** [Video lectures for Unit 3 →](#videos/unit3)
+
 ## Part A · Colour image processing
 
 ## 3.1 Colour fundamentals

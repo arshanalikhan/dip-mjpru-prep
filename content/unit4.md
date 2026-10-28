@@ -2,6 +2,8 @@
 
 > **Exam weight:** segmentation (thresholding, region split-merge) and edge/line detection appear in every recent paper. Registration has never been asked, but it is in the syllabus; one 7-mark answer is enough.
 
+**Prefer to watch first?** [Video lectures for Unit 4 →](#videos/unit4)
+
 ## Part A · Registration
 
 ## 4.1 Introduction

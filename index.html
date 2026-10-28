@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
-<link rel="stylesheet" href="assets/base.css?v=8">
-<link rel="stylesheet" href="assets/dip.css?v=8">
+<link rel="stylesheet" href="assets/base.css?v=12">
+<link rel="stylesheet" href="assets/dip.css?v=12">
 <script>try{var t=localStorage.getItem('dip-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <script>window.dipIcons=function(){try{if(window.lucide)window.lucide.createIcons({attrs:{"aria-hidden":"true"}})}catch(e){}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/lucide@0.453.0/dist/umd/lucide.min.js" onload="dipIcons()"></script>
@@ -25,6 +25,7 @@
     <a href="#analysis" data-page="analysis"><i data-lucide="chart-column"></i><span>PYQ analysis</span></a>
     <a href="#pyqs" data-page="pyqs"><i data-lucide="file-text"></i><span>All past papers</span></a>
     <a href="#style" data-page="style"><i data-lucide="pen-line"></i><span>How to write answers</span></a>
+    <a href="#videos" data-page="videos"><i data-lucide="circle-play"></i><span>Video lectures</span></a>
     <p class="side-h">Unit notes</p>
     <a href="#unit1" data-page="unit1"><i data-lucide="scan-eye"></i><span>1 · Fundamentals &amp; spatial</span></a>
     <a href="#unit2" data-page="unit2"><i data-lucide="audio-waveform"></i><span>2 · Frequency &amp; restoration</span></a>
@@ -65,6 +66,7 @@
     <div class="sheet-head"><b>All pages</b><button type="button" class="sheet-close" id="sheetClose" aria-label="Close"><i data-lucide="x"></i></button></div>
     <a href="#pyqs" data-page="pyqs"><i data-lucide="file-text"></i><span><b>All past papers</b><small>Every MJPRU DIP question, tagged by unit</small></span></a>
     <a href="#style" data-page="style"><i data-lucide="pen-line"></i><span><b>How to write answers</b><small>The 4–5 page MJPRU template</small></span></a>
+    <a href="#videos" data-page="videos"><i data-lucide="circle-play"></i><span><b>Video lectures</b><small>YouTube lectures for every syllabus topic</small></span></a>
     <a href="#unit1" data-page="unit1"><i data-lucide="scan-eye"></i><span><b>Unit 1 · Fundamentals &amp; spatial</b><small>Histograms, transforms, filters</small></span></a>
     <a href="#unit2" data-page="unit2"><i data-lucide="audio-waveform"></i><span><b>Unit 2 · Frequency &amp; restoration</b><small>DFT, LPF/HPF, homomorphic, noise, Wiener</small></span></a>
     <a href="#unit3" data-page="unit3"><i data-lucide="palette"></i><span><b>Unit 3 · Colour &amp; morphology</b><small>RGB/HSI, dilation, erosion, opening, closing</small></span></a>
@@ -117,7 +119,7 @@
     <div class="sec-head"><p class="eyebrow">Start here</p><h2>A plan for the days before the exam</h2><p>Four phases. Do them in order; each card links to the pages it needs.</p></div>
     <div class="days">
       <div class="day"><p class="when">Phase 1 · Learn the pattern</p><h3>PYQs and answer style</h3><ul><li><a href="#analysis">PYQ analysis</a>: the 17 ranked topics</li><li><a href="#pyqs">All past papers</a>: read every question once</li><li><a href="#style">How to write answers</a>: the template</li></ul></div>
-      <div class="day"><p class="when">Phase 2 · Units 1 and 2</p><h3>Half the marks</h3><ul><li><a href="#unit1">Unit 1</a>: histogram equalization numerical twice</li><li>Mean, median and max filter numerical</li><li><a href="#unit2">Unit 2</a>: degradation model and noise models</li></ul></div>
+      <div class="day"><p class="when">Phase 2 · Units 1 and 2</p><h3>Half the marks</h3><ul><li><a href="#unit1">Unit 1</a>: histogram equalization numerical twice (<a href="#videos/unit1">videos</a>)</li><li>Mean, median and max filter numerical</li><li><a href="#unit2">Unit 2</a>: degradation model and noise models</li></ul></div>
       <div class="day"><p class="when">Phase 3 · Units 3, 4, 5</p><h3>Morphology and segmentation</h3><ul><li><a href="#unit3">Unit 3</a>: dilation, erosion, opening, closing, RGB↔HSI</li><li><a href="#unit4">Unit 4</a>: thresholding, edges, split and merge</li><li><a href="#unit5">Unit 5</a>: one answer each, as a backup</li></ul></div>
       <div class="day"><p class="when">Phase 4 · Write papers</p><h3>Mocks under a timer</h3><ul><li><a href="#mock1">Mock 1</a> in 3 hours, then check</li><li><a href="#mock2">Mock 2</a> and <a href="#mock3">Mock 3</a></li><li><a href="#lastnight">Last-night sheet</a> the evening before</li></ul></div>
     </div>
@@ -128,6 +130,7 @@
       <a class="kitcard" href="#pyqs"><span class="ic"><i data-lucide="file-text"></i></span><span class="k">2017 · 2018 · 2019 · 2025-26</span><h3>All past papers</h3><p>Every question typed out and tagged by unit, with off-syllabus ones marked.</p><span class="go">Open →</span></a>
       <a class="kitcard" href="#style"><span class="ic"><i data-lucide="pen-line"></i></span><span class="k">The MJPRU template</span><h3>How to write answers</h3><p>Introduction, underlined definition, diagram, points, conclusion, and a time plan.</p><span class="go">Open →</span></a>
       <a class="kitcard" href="#unit1"><span class="ic"><i data-lucide="book-open"></i></span><span class="k">Units 1–5 · full syllabus</span><h3>Unit notes</h3><p>Exam definitions, formulas, masks and diagrams for every syllabus topic.</p><span class="go">Open →</span></a>
+      <a class="kitcard" href="#videos"><span class="ic"><i data-lucide="circle-play"></i></span><span class="k">110+ videos · every syllabus topic</span><h3>Video lectures</h3><p>Short exam-style videos and full lectures on YouTube, arranged unit by unit.</p><span class="go">Open →</span></a>
       <a class="kitcard" href="#mock1"><span class="ic"><i data-lucide="target"></i></span><span class="k">3 papers · 48 answers</span><h3>Mock papers</h3><p>70-mark papers in the MJPRU pattern with full answers; every numerical checked.</p><span class="go">Open →</span></a>
       <a class="kitcard" href="#lastnight"><span class="ic"><i data-lucide="moon-star"></i></span><span class="k">One page</span><h3>Last-night sheet</h3><p>Definitions, formulas, masks, diagrams to practise, and a numerical checklist.</p><span class="go">Open →</span></a>
     </div>
@@ -152,6 +155,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
-<script src="assets/app.js?v=8"></script>
+<script src="assets/app.js?v=12"></script>
 </body>
 </html>

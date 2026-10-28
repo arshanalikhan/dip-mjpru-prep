@@ -11,6 +11,7 @@ Study site for **MJPRU Bareilly · B.Tech VII Semester · Digital Image Processi
 | **PYQ analysis** | Six MJPRU DIP papers (2017, 2018, 2019, 2025-26 end-sem; 2025 Mid-1 and Mid-2) ranked by topic, with a predicted paper |
 | **All past papers** | Every question typed out and tagged by unit |
 | **How to write answers** | The MJPRU long-answer template: 4–5 pages per question, at least one diagram |
+| **Video lectures** | YouTube lectures for every syllabus topic, unit by unit: a short exam-style video and, where one exists, a full lecture. Tap to play on the page |
 | **Unit notes 1–5** | The full CS-403T syllabus, with exam definitions, formulas and diagrams |
 | **Mock papers 1–3** | 70-mark papers in the MJPRU pattern (any 5 of 8) with full answers in MJPRU style; every numerical checked |
 | **Last-night sheet** | Definitions, formulas, masks and the diagrams to practise |

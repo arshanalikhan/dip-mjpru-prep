@@ -2,6 +2,8 @@
 
 > **Exam weight:** the heaviest unit. In 2025-26 it gave 8 of the 16 parts. Histogram equalization has been asked in **every** end-sem paper.
 
+**Prefer to watch first?** [Video lectures for Unit 1 →](#videos/unit1)
+
 Based on the class Mid-1 notes PDF (§1.1–1.16), with the end-sem depth added.
 
 ## 1.1 What is Digital Image Processing

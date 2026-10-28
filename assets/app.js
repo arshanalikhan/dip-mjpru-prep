@@ -5,6 +5,7 @@ const PAGES = [
   { id: "analysis", name: "PYQ analysis", group: "start" },
   { id: "pyqs", name: "All past papers", group: "start" },
   { id: "style", name: "How to write answers", group: "start" },
+  { id: "videos", name: "Video lectures", group: "watch" },
   { id: "unit1", name: "Unit 1 · Fundamentals & spatial", group: "unit" },
   { id: "unit2", name: "Unit 2 · Frequency & restoration", group: "unit" },
   { id: "unit3", name: "Unit 3 · Colour & morphology", group: "unit" },
@@ -16,7 +17,7 @@ const PAGES = [
   { id: "lastnight", name: "Last-night sheet", group: "revise" }
 ];
 const byId = Object.fromEntries(PAGES.map(p => [p.id, p]));
-const STUDY = PAGES.filter(p => p.id !== "home");   // the 12 pages that can be marked as done
+const STUDY = PAGES.filter(p => p.id !== "home");   // the 13 pages that can be marked as done
 
 // Topic frequency across the six papers (2017, 2018, 2019, 2025-26 end-sem; 2025 Mid-1, Mid-2).
 const FREQ = [
@@ -88,6 +89,91 @@ function boxes(md) {
     `<div class="box box-${kind}">${title ? `<p class="box-t">${title}</p>` : ""}\n\n${body}\n\n</div>`);
 }
 
+// "@yt <id> | title | channel | duration" lines become a grid of video cards; the player loads only when tapped.
+const escHtml = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+function videos(md) {
+  return md.replace(/(?:^@yt .*(?:\r?\n|$))+/gm, block => {
+    const cards = block.trim().split(/\r?\n/).map(line => {
+      const [id, title, channel, len] = line.slice(4).split("|").map(x => escHtml(x.trim()));
+      return `<button type="button" class="vid" data-yt="${id}" aria-label="Play: ${title} (${channel}, ${len})">` +
+        `<span class="vid-thumb"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy"><span class="vid-play" aria-hidden="true"></span><span class="vid-len">${len}</span></span>` +
+        `<span class="vid-t">${title}</span><span class="vid-c">${channel}</span></button>`;
+    });
+    return `<div class="vids">${cards.join("")}</div>\n\n`;
+  });
+}
+// Tapped cards become a full-width YouTube player (IFrame API) with speed buttons and a full-screen button.
+// YouTube's embedded player accepts 0.25×–2× only; higher rates are silently capped at 2×.
+let ytApi = null;
+function loadYT() {
+  return ytApi ??= new Promise((resolve, reject) => {
+    if (window.YT && window.YT.Player) return resolve(window.YT);
+    window.onYouTubeIframeAPIReady = () => resolve(window.YT);
+    const s = document.createElement("script");
+    s.src = "https://www.youtube.com/iframe_api";
+    s.onerror = reject;
+    document.head.append(s);
+  });
+}
+const savedRate = () => { const r = Number(load("vid-rate", 1)); return r > 0 ? r : 1; };
+function playVideo(btn) {
+  const id = btn.dataset.yt, title = btn.querySelector(".vid-t").textContent;
+  const box = document.createElement("div"); box.className = "vid-thumb vid-on";
+  const slot = document.createElement("div"); box.append(slot);
+  const bar = document.createElement("div"); bar.className = "vid-bar";
+  const card = document.createElement("div"); card.className = "vid playing";
+  card.append(box, btn.querySelector(".vid-t"), btn.querySelector(".vid-c"), bar);
+  btn.replaceWith(card);
+  card.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
+
+  const fs = document.createElement("button"); fs.type = "button"; fs.className = "vid-btn"; fs.textContent = "⛶ Full screen";
+  // Real full screen where allowed; otherwise (some embedded browsers) the player fills the window instead.
+  const setMax = on => { card.classList.toggle("vid-max", on); document.body.classList.toggle("vid-max-open", on); fs.textContent = on ? "✕ Exit full size" : "⛶ Full screen"; };
+  fs.addEventListener("click", () => {
+    if (card.classList.contains("vid-max")) return setMax(false);
+    const req = box.requestFullscreen || box.webkitRequestFullscreen;
+    try { const p = req && req.call(box); if (p && p.catch) p.catch(() => setMax(true)); } catch (e) { setMax(true); }
+    setTimeout(() => { if (!document.fullscreenElement && !document.webkitFullscreenElement) setMax(true); }, 600);
+  });
+  addEventListener("keydown", e => { if (e.key === "Escape" && card.classList.contains("vid-max")) setMax(false); });
+  const yt = document.createElement("a"); yt.className = "vid-yt"; yt.href = `https://www.youtube.com/watch?v=${id}`; yt.target = "_blank"; yt.rel = "noopener"; yt.textContent = "Open on YouTube ↗";
+
+  const fallback = () => {   // API blocked: plain embed, YouTube's own controls only
+    const frame = document.createElement("iframe");
+    frame.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
+    frame.title = title; frame.allowFullscreen = true;
+    frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    slot.replaceWith(frame); bar.append(fs, yt);
+  };
+  loadYT().then(YT => {
+    new YT.Player(slot, {
+      host: "https://www.youtube-nocookie.com", videoId: id,
+      playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
+      events: {
+        onReady: e => {
+          const p = e.target, rates = p.getAvailablePlaybackRates().filter(r => r >= 1);
+          const label = document.createElement("span"); label.className = "vid-sp-l"; label.textContent = "Speed";
+          const group = document.createElement("span"); group.className = "vid-speeds"; group.setAttribute("role", "group"); group.setAttribute("aria-label", "Playback speed");
+          const mark = r => group.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.rate) === r)));
+          rates.forEach(r => {
+            const b = document.createElement("button"); b.type = "button"; b.className = "vid-btn"; b.dataset.rate = r; b.textContent = r + "×";
+            b.addEventListener("click", () => { p.setPlaybackRate(r); save("vid-rate", r); mark(r); });
+            group.append(b);
+          });
+          const want = rates.includes(savedRate()) ? savedRate() : 1;
+          p.setPlaybackRate(want); mark(want);
+          p.addEventListener("onPlaybackRateChange", ev => mark(ev.data));
+          const note = document.createElement("span"); note.className = "vid-note"; note.textContent = "2× is YouTube's limit";
+          bar.append(label, group, note, fs, yt);
+          p.playVideo();
+        }
+      }
+    });
+    const frame = box.querySelector("iframe"); if (frame) frame.title = title;
+  }).catch(fallback);
+}
+document.addEventListener("click", e => { const b = e.target.closest("button.vid"); if (b) playVideo(b); });
+
 function initMermaid() {
   mermaid.initialize({
     startOnLoad: false, securityLevel: "strict", theme: "base",
@@ -110,7 +196,7 @@ function markNav(page) {
     if (a.closest(".side-nav")) a.classList.toggle("done", isDone(a.dataset.page));
   });
   document.querySelectorAll(".bottombar [data-group]").forEach(a => a.classList.toggle("on", a.dataset.group === grp));
-  const moreOn = ["pyqs", "style"].includes(page);
+  const moreOn = ["pyqs", "style", "videos"].includes(page);
   $("moreBtn").classList.toggle("on", moreOn);
 }
 
@@ -131,13 +217,14 @@ updateCountdowns();
 setInterval(updateCountdowns, 60 * 60 * 1000);
 
 /* ---------- routing ---------- */
+// "#videos/unit2" opens a page and scrolls to the element with id "v-unit2".
 function route() {
-  let page = location.hash.slice(1) || "home";
+  let [page, sub] = location.hash.slice(1).split("/");
   if (!byId[page]) page = "home";
-  show(page);
+  show(page, sub);
 }
 
-function show(page) {
+function show(page, sub) {
   const first = current === null;
   current = page;
   closeSheet();
@@ -149,10 +236,10 @@ function show(page) {
   if (!first && !reduceMotion) { sec.classList.remove("enter"); void sec.offsetWidth; sec.classList.add("enter"); }
   window.scrollTo(0, 0);
   if (home) { document.title = "DIP End-Sem Prep · MJPRU CS-403T"; renderHome(); heroAnim.start(); }
-  else { heroAnim.stop(); renderDoc(page); }
+  else { heroAnim.stop(); renderDoc(page, false, sub); }
 }
 
-async function renderDoc(page, keepScroll) {
+async function renderDoc(page, keepScroll, sub) {
   const doc = $("doc"), y = scrollY;
   if (!cache[page]) doc.innerHTML = '<p class="loading">Loading…</p>';
   try {
@@ -162,7 +249,7 @@ async function renderDoc(page, keepScroll) {
     return;
   }
   if (current !== page) return;
-  doc.innerHTML = marked.parse(boxes(cache[page]));
+  doc.innerHTML = marked.parse(boxes(videos(cache[page])));
   doc.querySelectorAll("h2, h3").forEach(h => { if (!h.id) h.id = h.textContent.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60); });
   doc.querySelectorAll("table").forEach(t => t.setAttribute("tabindex", "0"));
   const h1 = doc.querySelector("h1");
@@ -177,6 +264,8 @@ async function renderDoc(page, keepScroll) {
   renderPager(page);
   window.dipIcons && window.dipIcons();
   if (keepScroll) window.scrollTo(0, y);
+  const target = sub && $("v-" + sub);
+  if (target) target.scrollIntoView();
 
   initMermaid();
   try { await mermaid.run({ nodes: doc.querySelectorAll("pre.mermaid") }); } catch (e) { console.warn(e); }
